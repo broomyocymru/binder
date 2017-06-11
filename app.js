@@ -3,7 +3,9 @@ var express = require('express'),
     os = require('os'),
     logger = require('morgan'),
     errorHandler = require('errorhandler'),
-    markdownServe = require('markdown-serve');
+    markdownServe = require('markdown-serve'),
+    pkginfo = require('pkginfo')(module, 'dependencies'),
+    gfm = require('get-module-file');
 
 var app = express();
 
@@ -33,14 +35,23 @@ app.use(markdownServe.middleware({
     view: 'markdown'
 }));
 
-var chapters = ['chap1', 'chap2'];
+var skills = Object.keys(module.exports.dependencies);
+console.log(skills);
 
-chapters.forEach(function(chap){
-  app.use('/' + chap, markdownServe.middleware({
-      rootDirectory: path.resolve(__dirname, 'node_modules/'+ chap +'/content'),
-      view: 'markdown'
-  }));
-})
+for (i = 0; i < skills.length; i++) {
+  var skill = skills[i];
+  console.log(skill);
+
+  var readmeFile = gfm.sync(__dirname, skill, 'content/README.md');
+  console.log(readmeFile);
+
+  if (readmeFile != false) {
+    app.use('/' + skill, markdownServe.middleware({
+        rootDirectory: path.resolve(__dirname, 'node_modules/'+ skill +'/content'),
+        view: 'markdown'
+    }));
+  }
+}
 
 app.listen(app.get('port'), function(){
     var h = (app.get('host') || os.hostname() || 'unknown') + ':' + app.get('port');
