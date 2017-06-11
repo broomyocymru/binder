@@ -22,32 +22,30 @@ if ('development' == app.get('env')) {
     app.set('host', 'http://localhost');
 }
 
-// Without view option specified, data is returned as JSON.
-// Here we are mounting on a separate sub-path... so to get at the about page for example, we would access http://localhost:3000/json/about
-// NOTE that the order of middleware(s) are important, so we need to put this first to route any requests to "/json" and handle as putting
-// this middleware after will never invoke it
 app.use('/json', markdownServe.middleware({
     rootDirectory: path.resolve(__dirname, 'content'),
 }));
 
+var dependencies = Object.keys(module.exports.dependencies);
+var skills = [];
+
 app.use(markdownServe.middleware({
     rootDirectory: path.resolve(__dirname, 'content'),
-    view: 'markdown'
+    view: 'markdown',
 }));
 
-var skills = Object.keys(module.exports.dependencies);
-console.log(skills);
+for (i = 0; i < dependencies.length; i++) {
+  var skill = dependencies[i];
+  var skillFile = gfm.sync(__dirname, skill, 'quest.yml');
 
-for (i = 0; i < skills.length; i++) {
-  var skill = skills[i];
-  console.log(skill);
+  if (skillFile != false) {
+    console.log("Hosting Skill " +  skill)
+    skills.append(skill);
 
-  var readmeFile = gfm.sync(__dirname, skill, 'content/README.md');
-  console.log(readmeFile);
-
-  if (readmeFile != false) {
+    rootDir = path.resolve(__dirname, 'node_modules/'+ skill);
+    console.log(rootDir);
     app.use('/' + skill, markdownServe.middleware({
-        rootDirectory: path.resolve(__dirname, 'node_modules/'+ skill +'/content'),
+        rootDirectory: rootDir,
         view: 'markdown'
     }));
   }
