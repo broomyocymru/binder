@@ -1,5 +1,4 @@
 #! /usr/bin/env node
-var pkginfo = require('pkginfo')(module, 'dependencies');
 const publisher = require('./publish.js');
 var shell = require("shelljs");
 shell.config.silent = true;
@@ -100,7 +99,7 @@ function serve(path){
 function publish(path){
     console.log("Publish Quest");
     shell.cd(path);
-    publisher(path);    
+    publisher(path);
 }
 
 function optionSet(name, value){
