@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+const publisher = require('./publish.js');
 var shell = require("shelljs");
 shell.config.silent = true;
 
@@ -40,6 +41,10 @@ switch(args[0]) {
         optionSet("dir", options.dir);
         serve(options.dir);
         break;
+    case "publish":
+        optionSet("dir", options.dir);
+        publish(options.dir);
+        break;
     default:
       usage();
 }
@@ -50,6 +55,7 @@ function usage(){
   console.log("binder add --skill=<name> (--dir <path>)");
   console.log("binder remove --skill=<name> (--dir <path>)");
   console.log("binder serve (--dir <path>)");
+  console.log("binder publish (--dir <path>)");
   shell.exit(0);
 }
 
@@ -88,6 +94,12 @@ function serve(path){
     console.log("Serve Binder");
     shell.cd(path);
     shell.exec("node " + path +"/node_modules/binder/app.js");
+}
+
+function publish(path){
+    console.log("Publish Quest");
+    shell.cd(path);
+    publisher(path);
 }
 
 function optionSet(name, value){
