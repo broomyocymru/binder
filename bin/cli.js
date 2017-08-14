@@ -24,14 +24,12 @@ if(process.argv.length > 2){
 switch(args[0]) {
     case "create-quest":
         optionSet("dir", options.dir);
-        //optionSet("quest", options.quest);
         optionSet("githubUser", options.githubUser);
         optionSet("githubPass", options.githubPass);
         createQuest(options.dir, options.quest, options.githubUser, options.githubPass);
         break;
     case "create-skill":
         optionSet("dir", options.dir);
-        //optionSet("skill", options.skill);
         optionSet("githubUser", options.githubUser);
         optionSet("githubPass", options.githubPass);
         createSkill(options.dir, options.skill, options.githubUser, options.githubPass);
