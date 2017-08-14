@@ -17,6 +17,7 @@
     "express-handlebars": "^1.1.0",
     "fs-extra": "^3.0.1",
     "get-module-file": "^0.1.0",
+    "github-api": "^3.0.0",
     "hbs": "^2.7.0",
     "jade": "^1.7.0",
     "markdown-serve": "*",
